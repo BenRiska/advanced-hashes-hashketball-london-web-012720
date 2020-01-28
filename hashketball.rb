@@ -5,7 +5,7 @@ def game_hash
 match = {
     :home => {
         :team_name => "Brooklyn Nets",
-        :colors => ['black', 'white'],
+        :colors => ['Black', 'White'],
         :players => [
             {
                 :player_name => 'Alan Anderson',
@@ -69,7 +69,7 @@ match = {
         :colors => ['Turquoise', 'Purple'],
         :players => [
             {
-                :player_name => 'Jeff Adrian',
+                :player_name => 'Jeff Adrien',
                 :number => 4,
                 :shoe => 18,
                 :points => 10,
@@ -126,101 +126,166 @@ match = {
         ]
     }
 }
-
 match
 end
-
 def num_points_scored (player)
 
     match = game_hash
-
-    count1 = 0
-    while count1 < match.length
-        count2 = 0
-        while count1 < match[count1][:players].length
-            if match[count1][:players][count2][:player_name] == player 
-                return match[count1][:players][count2][:points]
-            end
-            count2++
-        end
-        count1++
+    match.each do |place, team_stats|
+      team_stats[:players].each do |player_name|
+       if  player_name[:player_name] == player
+         return player_name[:points]
+       end
+      end
     end
-    err = 'Player not found.'
-    err
 end
 
 def shoe_size(player)
 
     match = game_hash
 
-    count1 = 0
-    count2 = 0
-    while count1 < match.length
-        while count1 < match[count1][:players].length
-            if match[count1][:players][count2][:player_name] == player 
-                return match[count1][:players][count2][:shoe_size]
-            end
-            count2++
+    match.each do |team, team_stats|
+      team_stats[:players].each do |player_stats|
+        
+        if player_stats[:player_name] == player
+          
+          return player_stats[:shoe]
         end
-        count1++
+      end
     end
-    err = 'Player not found.'
-    err
 end
 
 def team_colors(team)
 
     match = game_hash
-    teams = []
-    count = 0
-    while count < match.length
-        teams << match[count][:team_name]
-        count++
+    match.each do |teams, team_stats|
+      
+      
+      if team_stats[:team_name] == team
+        
+        return team_stats[:colors]
+      end
     end
-    teams
 end
 
 def player_numbers(team)
-
-    match = game_hash
     numbers = []
-    count1 = 0
-    count2 = 0
-    while count1 < match.length
-        if match[count1][:team_name] == team
-            while count2 < match[count1][:players].length
-                numbers << match[count1][:players][count2][:number]
-                count2++
-            end
+    match = game_hash
+    
+    match.each do |teams, team_stats| 
+      if team_stats[:team_name] == team
+        
+        
+        team_stats[:players].each do |player_stats| 
+           numbers << player_stats[:number]
+  
         end
-        count1++
+      end
     end
     numbers
 end
 
 def player_stats(player)
+    
+    
+   match = game_hash
+   
+   match.each do |team, team_stats|
+     team_stats[:players].each do |player_stats|
+       if player_stats[:player_name] == player
+           player_stats.delete :player_name
+           return player_stats
+       end
+     end
+   end
 
-    match = game_hash
-    count1 = 0
-    count2 = 0
-    stats = {}
-
-    while count1 < match.length
-        while count2 < match[count1][:players].length 
-            if player == match[count1][:players][count2][:player_name]
-                stats = match[count1][:players][count2]
-            end
-            count2++
-        end
-        count1++
-    end
-    stats.except!(:player_name)
-    stats
 end
 
+def team_names 
+  match = game_hash
+  teams = []
+  
+  match.each do |team, team_stats|
+    teams << team_stats[:team_name]
+  end
+  teams
+end
 
+def big_shoe_rebounds
+  match = game_hash
+  biggest_shoe = 0
+  biggest_shoe_player = {}
+  match.each do |teams, team_stats|
+    team_stats[:players].each do |player_stats|
+      if player_stats[:shoe] > biggest_shoe
+        biggest_shoe = player_stats[:shoe]
+        biggest_shoe_player = player_stats
+      end
+    end
+  end
+  return biggest_shoe_player[:rebounds]
+end
 
+def most_points_scored
+  match = game_hash
+  highest_score = 0
+  highest_scoring_player = ''
+  
+  match.each do |place, team|
+    team[:players].each do |player|
+      if highest_score < player[:points]
+        highest_score = player[:points]
+        highest_scoring_player = player[:player_name]
+      end
+    end
+  end
+  highest_scoring_player
+end
 
+def winning_team
+  match = game_hash
+  team1_points = 0
+  team2_points = 0
+  
+  match.each do |place, team|
+    team[:players].each do |player|
+      if place == :home
+        team1_points += player[:points]
+      else
+        team2_points += player[:points]
+      end
+    end
+  end
+  
+  if team1_points > team2_points 
+    return match[:home][:team_name]
+  else
+    return match[:away][:team_name]
+  end
+  
+end
 
+def player_with_longest_name 
+  match = game_hash
+  longest_name = ''
+  
+  match.each do |place, team|
+    team[:players].each do |player|
+      if longest_name.length < player[:player_name].length
+        longest_name = player[:player_name]
+      end
+    end
+  end
+  longest_name
+end
 
-
+def long_name_steals_a_ton?
+  match = game_hash
+  longest_name = player_with_longest_name
+  
+  match.each do |place, team|
+    team[:players].each do |player|
+      
+    end
+  end
+end
